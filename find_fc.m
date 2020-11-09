@@ -4,12 +4,12 @@ function fc = find_fc(R1,R2,C1,C2)
     C1 = 0.1e-6;
     C2 = 0.2e-6;
     F = @(x) (0.7071*0.2727)... 
-        - abs(((2*pi*x*1i)/((C2)*R2)) / (((2*pi*x*1i)^2)...
-        + (2*pi*x*1i)*(1/((C1)*R1)+1/((C1)*R2)+1/((C2)*R2))...
-        + 1/((C1)*(C2)*R1*R2)));
+        - abs(((2*pi*x*1i)/(C2*R2)) / (((2*pi*x*1i)^2)...
+        + (2*pi*x*1i)*(1/(C1*R1)+1/(C1*R2)+1/(C2*R2))...
+        + 1/(C1*C2*R1*R2)));
     fprintf("Bisekcja | dolna ");
     freq_bisf(F,2,25000); 
-    fprintf("Bisekcja | górna ");
+    fprintf("Bisekcja | górna "); 
     freq_bisf(F,300000,500000); 
     fprintf("Sieczne | dolna ");
     freq_secf(F,2,25000); 
