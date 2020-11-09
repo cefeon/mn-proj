@@ -16,14 +16,14 @@ function fc = find_fc(R1,R2,C1,C2)
     fprintf("Sieczne | górna ");
     freq_secf(F,300000,500000); 
     fprintf("quasi-Newtona | dolna ");
-    freq_secf(F,10000,0.5e-11); 
+    freq_qn(F,10000,0.5e-11); 
     fprintf("quasi-Newtona | górna");
-    freq_secf(F,300000,0.5e-11); 
+    freq_qn(F,300000,1e-9); 
 end
 function x = freq_bisf(F,x0,x1)
     iterator = 0;  
 	x = (x0+x1)/2;
-	precision = 1e-5;
+	precision = 1e-6;
 	while abs(F(x))>precision
         if (F(x)*F(x0) < 0)
             x1=x;
