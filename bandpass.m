@@ -4,7 +4,7 @@ function bandpass(freq)
     C1 = 0.1e-6;
     C2 = 0.2e-6;
     RL = 1e5;
-    h = 1e-7;
+    h = 1e-5;
     t = [ 0 : h : 0.1e-3 ]; 
     
     if (~isempty(freq)) 
@@ -17,7 +17,7 @@ function bandpass(freq)
         [  1/C1 * ( (e(t) - y(1) - y(2))/R2 + (e(t) - y(1))/R1 )
            1/C2 * ( (e(t) - y(1) - y(2))/R2 + y(2)/RL ) ];
     
-    eulerV = euler(t, h, dy)
+    eulerV = euler(t, h, dy);
     plot(t, eulerV(2,:));
     xlim([0 1e-4])
     grid on
