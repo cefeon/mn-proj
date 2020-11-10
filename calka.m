@@ -4,9 +4,9 @@ function calka()
     C1 = 0.1e-6;
     C2 = 0.2e-6;
     RL = 1e5;
-    h = 1e-2;
+    h = 1e-7;
     freq = 100000;
-    t = [ 0 : h : 1 ]; 
+    t = [ 0 : h : 1e-5 ]; 
     y = [0 0]';
     e = @(t) sin(2*pi*t*freq);
     
@@ -22,11 +22,11 @@ function calka()
         dP(i) = (e(t(i))-u1(i))^2/R1 + (e(t(i))-u1(i)-u2(i))^2/R1;
     end
     %metoda prostokatów
-    prostokat=dP(1:end-1)*h;
+    prostokat = dP(1:end-1) * h;
     prostokaty = sum(prostokat)
     %metoda parabol (Simpsona)
-    for i=1 : 2 : length(t)-2
-        simpson(i)=h/3*(dP(i)+4*dP(i+1)+dP(i+2));
+    for i = 1 : 2 : length(t)-2
+        simpson((i + 1) / 2) = h/3*(dP(i)+4*dP(i+1)+dP(i+2));
     end
     parabole = sum(simpson)
 end
