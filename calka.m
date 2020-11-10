@@ -31,8 +31,8 @@ function calka()
         simpson((i + 1) / 2) = h/3*(dP(i)+4*dP(i+1)+dP(i+2));
     end
     parabole = sum(simpson)
-    
 end
+
 
 
 function y = euler(t,h,f)

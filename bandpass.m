@@ -4,8 +4,8 @@ function bandpass(freq)
     C1 = 0.1e-6;
     C2 = 0.2e-6;
     RL = 1e5;
-    h = 1e-5;
-    t = [ 0 : h : 0.1e-3 ]; 
+    h = 1e-7;
+    t = [ 0 : h : 1]; 
     
     if (~isempty(freq)) 
         e = @(t) sin(2*pi*t*freq);
