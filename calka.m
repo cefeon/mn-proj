@@ -22,10 +22,12 @@ function calka()
     end
     prostokat=dP*h;
     prostokaty = sum(prostokat)
-    %for i=1 : length(dP)-1
-    %    dPh(i) = dP(i)+dP(i+1);
-    %end
-    %simpson=(t(length(t))-t(1))/(6*length(t))*(dP(1)+dP(length(dP))+2*sum(dP(1:end-1)+4*sum(dPh)))
+    for a=1 : length(t)-2
+        for i=1 : 3
+            simpson(i)=h/3*(dP(a)+4*dP(a+1)+dP(a+2));
+        end
+    end
+    parabole = sum(simpson)
 end
 
 
