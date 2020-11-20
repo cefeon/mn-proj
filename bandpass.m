@@ -6,9 +6,19 @@ function bandpass(freq)
     RL = 1e8;
     h = 1e-7;
     t = [ 0 : h : 0.1e-3]; 
+
+    if freq>0
+        e = @(t) sin(2*pi*t*freq);
+    end
     
-    e = @(t) sin(2*pi*t*freq);
-    
+    if freq=='nosin'
+        e = @(t) 1;
+    end
+
+    if freq=='cycle'    
+        e = @(t) rectpulse(t,0.05e-3);
+    end
+
     dy = @(t,y) ...
         [  1/C1 * ( (e(t) - y(1) - y(2))/R2 + (e(t) - y(1))/R1 )
            1/C2 * ( (e(t) - y(1) - y(2))/R2 - y(2)/RL ) ];
@@ -31,5 +41,14 @@ function y = beuler(t,h,f)
     for i = 1 : length(t)-1
         prediction = y(:, i) + h/2 * f(t(i), y(:, i));
         y(:, i+1) = y(:, i) + h * f(t(i) +h/2, prediction);
+    end
+end
+
+function y = rectpulse(x,T)
+    modulo = mod(x,T);
+    if modulo<(T/2)
+        y = 1;
+    else
+        y = 0;
     end
 end
