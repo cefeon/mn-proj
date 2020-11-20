@@ -33,8 +33,6 @@ function calka()
     fprintf('Metoda Simpsona: %e \n\n',parabole);
 end
 
-
-
 function y = euler(t,h,f)
     y = [0 0]';
     for i = 1 : length(t)-1
