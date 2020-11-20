@@ -7,6 +7,12 @@ function plot_g(R1,R2,C1,C2,fmin,fmax)
     for i = 1 : length(x)
         y(i) = F(z(i));
     end
-    semilogx(x,y);
+    
+    thr = zeros(1,length(x));
+    for i = 1 : length(x)
+        thr(i) = max(y)-3;
+    end
+    
+    semilogx(x,y,x,thr);
     grid on
 end
