@@ -3,25 +3,22 @@ function calka()
     R2 = 10;
     C1 = 0.1e-6;
     C2 = 0.2e-6;
-    RL = 1e5;
+    RL = 1e8;
     h = 1e-7;
-    freq = 100000;
-    t = [ 0 : h : 1 ]; 
-    y = [0 0]';
+    t = [ 0 : h : 1e-4]; 
+    freq = 50;
     
     e = @(t) sin(2*pi*t*freq);
     dy = @(t,y) ...
         [  1/C1 * ( (e(t) - y(1) - y(2))/R2 + (e(t) - y(1))/R1 )
-           1/C2 * ( (e(t) - y(1) - y(2))/R2 + y(2)/RL ) ];
+           1/C2 * ( (e(t) - y(1) - y(2))/R2 - y(2)/RL ) ];
     u = euler(t, h, dy);
-
-    u1 = u(1,:);
-    u2 = u(2,:);
     
+    %obliczanie wartości P ze wzoru
     for i=1 : length(t)
-        dP(i) = (e(t(i))-u1(i))^2/R1 + (e(t(i))-u1(i)-u2(i))^2/R1;
+        dP(i) = (e(t(i))-u(1,i))^2/R1 + (e(t(i))-u(1,i)-u(2,i))^2/R2;
     end
-    
+    plot(t,dP);
     
     %metoda prostokatów
     prostokat = dP(1:end-1) * h;
