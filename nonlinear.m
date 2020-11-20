@@ -1,23 +1,51 @@
 un = [-1 -0.75 -0.5 -0.25 0 0.25 0.5 0.75 1];
 in = [0.01 -0.01 0.02 0.01 0 0.23 0.42 0.6 0.95];
+
 i = @(u) interpolate(u,un,in);
 r = @(u) i(u)/u;
 
-%interpolacja wielomianowa m. Vandermonde'a
-function i = interpolate(u,un,in)
-    n = length(un);
-    A = zeros(n);
+ud = [-1:0.01:1]
+id = [];
+ad3 = [];
+ad5 = [];
+for i=1:length(ud)
+    id(i) = ctv(interpolate(un,in),ud(i));
+    ad3(i) = ctv(aprox(un,in,3),ud(i));
+    ad5(i) = ctv(aprox(un,in,5),ud(i));
+end
 
-    for w=1:n
-        for k=1:n
-            A(w,k) = un(w)^(k-1);
+plot(un,in,'o',ud,id,ud,ad3,ud,ad5)
+
+%interpolacja
+function A = interpolate(X,Y)
+    M = vandermonde(X);
+    A = M\Y';
+end
+
+%aproksymacja stopnia n
+function A = aprox(X,Y,n)
+    M = vandermonde(X);
+    M = M(:,1:n);
+    MTM = M'*M;
+    MTY = M'*Y';
+    A = MTM\MTY;
+end
+
+%macierz Vandermonde'a
+function M = vandermonde(X)
+    for w=1:length(X)
+        for k=1:length(X)
+            A(w,k) = X(w)^(k-1);
         end
     end
-    a = A\in';
+    M = A;
+end
 
+%na podstawie macierzy współczynników i x wylicza wartość wielomianu W(x)
+function y = ctv(A,x)
     s = 0;
-    for i=1:n
-        s = s+a(i)*u^(i-1);
+    for i=1:length(A)
+        s = s+A(i)*x^(i-1);
     end
-    i = s;
+    y = s;
 end
