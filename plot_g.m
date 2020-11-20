@@ -3,11 +3,10 @@ function plot_g(R1,R2,C1,C2,fmin,fmax)
     x = logspace (log10(fmin),log10(fmax));
     z = 2i*pi*x;
     
-    y = zeros(length(x));
+    y = zeros(1,length(x));
     for i = 1 : length(x)
         y(i) = F(z(i));
     end
-    
     semilogx(x,y);
     grid on
 end
