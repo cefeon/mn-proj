@@ -20,11 +20,12 @@ function calka()
     end
     plot(t,dP);
     
-    %metoda prostokatów
+    %złożona metoda prostokatów lewych
+
     prostokat = dP(1:end-1) * h;
     prostokaty = sum(prostokat)
     
-    %metoda parabol (Simpsona)
+    %złożona metoda parabol (Simpsona)
     for i = 1 : 2 : length(t)-2
         simpson((i + 1) / 2) = h/3*(dP(i)+4*dP(i+1)+dP(i+2));
     end
