@@ -18,10 +18,10 @@ function calka()
     for i=1 : length(t)
         dP(i) = (e(t(i))-u(1,i))^2/R1 + (e(t(i))-u(1,i)-u(2,i))^2/R2;
     end
+    
     plot(t,dP);
     
-    %złożona metoda prostokatów lewych
-
+    %złożona metoda prostokątów lewych
     prostokat = dP(1:end-1) * h;
     prostokaty = sum(prostokat)
     
