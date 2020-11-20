@@ -13,6 +13,6 @@ function plot_g(R1,R2,C1,C2,fmin,fmax)
         thr(i) = max(y)-3;
     end
     
-    semilogx(x,y,x,thr);
+    semilogx(x,y,x,thr,13800, thr(1),'gx',305600, thr(1), 'gx');
     grid on
 end
