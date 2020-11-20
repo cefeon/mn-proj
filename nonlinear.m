@@ -4,7 +4,7 @@ in = [0.01 -0.01 0.02 0.01 0 0.23 0.42 0.6 0.95];
 i = @(u) interpolate(u,un,in);
 r = @(u) i(u)/u;
 
-ud = [-1:0.01:1]
+ud = [-1:0.01:1];
 id = [];
 ad3 = [];
 ad5 = [];
@@ -14,7 +14,9 @@ for i=1:length(ud)
     ad5(i) = ctv(aprox(un,in,5),ud(i));
 end
 
+
 plot(un,in,'o',ud,id,ud,ad3,ud,ad5)
+grid on
 
 %interpolacja
 function A = interpolate(X,Y)
