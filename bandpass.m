@@ -6,12 +6,7 @@ function bandpass(freq)
     RL = 1e5;
     h = 1e-7;
     t = [ 0 : h : 1]; 
-    
-    if (~isempty(freq)) 
-        e = @(t) sin(2*pi*t*freq);
-    else
-        e = @(t) 1;
-    end
+    e = @(t) sin(2*pi*t*freq);
     
     dy = @(t,y) ...
         [  1/C1 * ( (e(t) - y(1) - y(2))/R2 + (e(t) - y(1))/R1 )
