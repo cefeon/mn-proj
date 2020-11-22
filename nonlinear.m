@@ -15,8 +15,6 @@ for i = 1:length(ud)
     ad5(i) = ctv(aprox(un, in, 5), ud(i));
     hold on
 end
-    spl = spliner(un,in);
-    plot(spl)
 plot(un, in, 'o', ud, id, ud, ad3, ud, ad5)
 grid on
 
@@ -53,42 +51,4 @@ function y = ctv(A, x)
         s = s + A(i) * x ^ (i - 1);
     end
     y = s;
-end
-
-%splajn 3 stopnia
-function W = spliner(X, Y)
-    N = length(X);
-    h = (X(N) - X(1)) / (N - 1);
-    M = diag(ones(1, N - 3), 1) + diag(4 * ones(1, N - 2))...
-      + diag(ones(1, N - 3), - 1);
-    
-    for i = 1:N - 2
-        z(i) = (6 / h ^ 2) * (Y(i + 2) - 2 * Y(i + 1) + Y(i));
-    end
-    w = M \ z';
-
-    sigma = [0; w; 0];
-
-    for i = 1 : N - 1
-        a(i) = (sigma(i + 1) - sigma(i)) / (6 * h);
-        b(i) = sigma(i) / 2;
-        c(i) = (Y(i + 1) - Y(i)) / h ...
-             - h / 6 * (2 * sigma(i) + sigma(i + 1));
-        d(i) = Y(i);
-    end
-
-    r = 21;
-    hh = h / r; %size of subinterval
-
-    x = X(1):hh:X(N);
-
-    W = [];
-    for i = 1 : N - 1
-        for j = r * (i - 1) + 1:r * i
-            W(j) = a(i) * (x(j) - X(i)) ^ 3 ...
-                 + b(i) * (x(j) - X(i)) ^ 2 ...
-                 + c(i) * (x(j) - X(i)) + d(i);
-        end
-    end
-    W (r * (N - 1) + 1) = Y(N);
 end
