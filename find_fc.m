@@ -19,6 +19,7 @@ format long
     freq_qn(F, 300000, 1e-6, precision);
 end
 
+%metoda bisekcji
 function x = freq_bisf(F, x0, x1, precision)
     iterator = 0;
     x = (x0 + x1) / 2;
@@ -34,6 +35,7 @@ function x = freq_bisf(F, x0, x1, precision)
     fprintf("granica to %f. %d iteracji użyto \n",x,iterator);
 end
 
+%metoda siecznych
 function x = freq_secf(F, x0, x1, precision)
     iterator = 0;
     x = x1 - F(x1) * (x1 - x0) / (F(x1) - F(x0));
@@ -46,6 +48,7 @@ function x = freq_secf(F, x0, x1, precision)
     fprintf("granica to %f. %d iteracji użyto \n",x,iterator);
 end
 
+%metoda quasi-Newtona
 function x = freq_qn(F, x, delta, precision)
     iterator = 0;
     while abs(F(x)) > precision
@@ -55,6 +58,7 @@ function x = freq_qn(F, x, delta, precision)
     fprintf("granica to %f. %d iteracji użyto \n",x,iterator);
 end
 
+%obliczanie pochodnej 
 function dif = differ (F, x, delta)
     dif = (F(x + delta) - F(x))/delta;
 end

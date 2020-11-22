@@ -71,7 +71,7 @@ function y = beuler(t,h,f)
     end
 end
 
-%funkcja pulsacyjna
+%funkcja okresowa kwadratowokształtna
 function y = rectpulse(x,T)
     modulo = mod(x,T);
     if modulo<(T/2)

@@ -16,7 +16,7 @@ function bandpass(freq)
     end
 
     if freq=='cycle'    
-        e = @(t) rectpulse(t,0.05e-3);
+       e = @(t) rectpulse(t,0.05e-3);
     end
 
     dy = @(t,y) ...
@@ -31,13 +31,15 @@ function bandpass(freq)
     grid on
 end
 
+%metoda Eulera
 function y = euler(t,h,f)
     y = [0 0]';
     for i = 1 : length(t)-1
-        y(:, i+1) = y(:, i) + h * f(t(i), y(:, i));
+       y(:, i+1) = y(:, i) + h * f(t(i), y(:, i));
     end
 end
 
+%ulepszona metoda Eulera
 function y = beuler(t,h,f)
     y = [0 0]';
     for i = 1 : length(t)-1
@@ -46,6 +48,7 @@ function y = beuler(t,h,f)
     end
 end
 
+%funkcja okresowa kwad
 function y = rectpulse(x,T)
     modulo = mod(x,T);
     if modulo<(T/2)
