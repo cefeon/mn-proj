@@ -54,6 +54,7 @@ function calka = int_rect (t,df, h)
     calka = sum(dfdx);
 end
 
+%metoda Eulera
 function y = euler(t,h,f)
     y = [0 0]';
     for i = 1 : length(t)-1
@@ -61,6 +62,7 @@ function y = euler(t,h,f)
     end
 end
 
+%ulepszona metoda Eulera
 function y = beuler(t,h,f)
     y = [0 0]';
     for i = 1 : length(t)-1
@@ -69,6 +71,7 @@ function y = beuler(t,h,f)
     end
 end
 
+%funkcja pulsacyjna
 function y = rectpulse(x,T)
     modulo = mod(x,T);
     if modulo<(T/2)
