@@ -5,7 +5,7 @@ function calka()
     C2 = 0.2e-6;
     RL = 1e8;
     h = 1e-8;
-    t = [ 0 : h : 1]; 
+    t = [ 0 : h : 1e-3]; 
     freq = 'cycle';
     
     if freq>0
@@ -31,18 +31,27 @@ function calka()
         dP(i) = (e(t(i))-u(1,i))^2/R1 + (e(t(i))-u(1,i)-u(2,i))^2/R2;
     end
     
-    %złożona metoda prostokątów lewych
-    prostokat = dP(1:end-1) * h;
-    prostokaty = sum(prostokat);
-    
-    %złożona metoda parabol (Simpsona)
-    for i = 1 : 2 : length(t)-2
-        simpson((i + 1) / 2) = h/3*(dP(i)+4*dP(i+1)+dP(i+2));
-    end
-    parabole = sum(simpson);
+    parabole = simps (t,h,dP);
+    prostokaty = int_rect (t,dP,h);
     
     fprintf('Metoda prostokatów: %e \n\n',prostokaty);
     fprintf('Metoda Simpsona: %e \n\n',parabole);
+end
+
+%złożona metoda parabol (Simpsona)
+function calka = simps (t,h,df)
+    for i = 1 : 2 : length(t)-2
+        simpson((i + 1) / 2) = h/3*(df(i)+4*df(i+1)+df(i+2));
+    end
+    calka = sum(simpson);
+end
+
+%złożona metoda prostokątów lewych
+function calka = int_rect (t,df, h)
+    for i =  1 : length(t)-1
+        dfdx(i) = df(i) * h;
+    end
+    calka = sum(dfdx);
 end
 
 function y = euler(t,h,f)
