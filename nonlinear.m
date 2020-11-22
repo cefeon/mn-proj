@@ -1,8 +1,30 @@
+R1 = 30;
+R2 = 10;
+C1 = 0.1e-6;
+C2 = 0.2e-6;
+RL = 1e8;
+h = 1e-7;
+t = [ 0 : h : 0.05e-3]; 
+freq = 65000;
+e = @(t) sin(2*pi*t*freq);
+
 un = [-1 -0.75 -0.5 -0.25 0 0.25 0.5 0.75 1];
 in = [0.01 -0.01 0.02 0.01 0 0.23 0.42 0.6 0.95];
+       
+i_inter = @(u) ctv(interpolate(un, in), u);
 
-i = @(u) interpolate(u, un, in);
-r = @(u) i(u) / u;
+i_aprox3 = @(u) ctv(aprox(un, in, 3), u);
+
+i_aprox5 = @(u) ctv(aprox(un, in, 5), u);
+
+i_spline = @(u) splineit(un, in, u);
+
+dy = @(t,y,In) ...
+        [  1/C1 * ( (e(t) - y(1) - y(2))/R2 + (e(t) - y(1))/R1 )
+           1/C2 * ( (e(t) - y(1) - y(2))/R2 - In )];
+
+u = euler(t, h, dy, i_spline);
+plot(t, u(2,:));
 
 ud = [-1:0.01:1];
 id = [];
@@ -14,10 +36,10 @@ for i = 1:length(ud)
     ad3(i) = ctv(aprox(un, in, 3), ud(i));
     ad5(i) = ctv(aprox(un, in, 5), ud(i));
     spl(i) = splineit(un,in,ud(i));
-    hold on
 end
-plot(un, in, 'o', ud, id, ud, ad3, ud, ad5, ud, spl)
-grid on
+
+%plot(un, in, 'o', ud, id, ud, ad3, ud, ad5, ud, spl)
+%grid on
 
 %interpolacja
 function A = interpolate(X, Y)
@@ -54,7 +76,7 @@ function y = ctv(A, x)
     y = s;
 end
 
-%znajduje do którego sektora należy x
+%znajduje do którego sektora należy x do spline'a
 function sect = sector(x,X)
     N = length(X);
     R = N;
@@ -75,7 +97,7 @@ function sect = sector(x,X)
     end
 end
 
-%oblicza macierz drugich pochodnych
+%oblicza macierz drugich pochodnych do spline'a
 function diff2 = difmatrix(X,Y,h)
     N = length(X);
     M = diag(ones(1, N - 3), 1) + diag(4 * ones(1, N - 2))...
@@ -97,3 +119,12 @@ function y = splineit(X,Y,x)
         - ((x - X(p))^3/h - (x - X(p))*h)*diff2(p+1)/6 ...
         + Y(p)*(x - X(p+1))/h - Y(p+1)*(x - X(p))/h;
 end
+
+%metoda Eulera
+function y = euler(t,h,f,In)
+    y = [0 0]';
+    for i = 1 : length(t)-1
+       y(:, i+1) = y(:, i) + h * f(t(i), y(:, i), In(y(2,i)));
+    end
+end
+
