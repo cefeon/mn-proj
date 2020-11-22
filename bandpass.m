@@ -23,8 +23,10 @@ function bandpass(freq)
         [  1/C1 * ( (e(t) - y(1) - y(2))/R2 + (e(t) - y(1))/R1 )
            1/C2 * ( (e(t) - y(1) - y(2))/R2 - y(2)/RL ) ];
     
-    u = euler(t, h, dy);
-    plot(t, u(2,:));
+    %u = euler(t, h, dy); %metoda Eulera
+    u = beuler(t, h, dy); %ulepszona metoda Eulera
+    plot(t, u(1,:)); %rysuj wykres u1
+    %plot(t, u(2,:)); %rysuj wykres u2
     xlim([0 1e-4])
     grid on
 end
