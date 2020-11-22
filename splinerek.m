@@ -41,7 +41,7 @@ function diff2 = difmatrix(X,Y,h)
     diff2 = [0; M \ z'; 0];
 end
 %oblicza wartość spline'a w punkcie x
-function y = splineit(x,X,Y)
+function y = splineit(X,Y,x)
     p = sector(x,X);
     h = X(p)-X(p+1);
     diff2 = difmatrix(X,Y,h);
