@@ -1,10 +1,9 @@
 function fc = find_fc(R1, R2, C1, C2)
-format long
     F = @(x) (0.7071 * 0.2727)...
        - abs(((2i * pi * x) * (1/(C2 * R2))) / (((2i * pi * x) ^ 2)...
        + (2i * pi * x) * (1 / (C1 * R1) + 1 / (C1 * R2) + 1 / (C2 * R2))...
        + 1 / (C1 * C2 * R1 * R2)));
-    precision = 1e-6;
+    precision = 1e-7;
     fprintf("Metoda bisekcji | dolna ");
     freq_bisf(F, 0, 35000, precision);
     fprintf("Metoda bisekcji | górna ");
@@ -14,9 +13,10 @@ format long
     fprintf("Metoda siecznych | górna ");
     freq_secf(F, 300000, 500000, precision);
     fprintf("Metoda quasi-Newtona | dolna ");
-    freq_qn(F, 0, 1e-6, precision);
+    freq_qn(F, 0, 35000, 1e-7, precision);
     fprintf("Metoda quasi-Newtona | górna ");
-    freq_qn(F, 300000, 1e-6, precision);
+    freq_qn(F, 300000, 500000, 1e-7, precision);
+
 end
 
 %metoda bisekcji
@@ -49,7 +49,13 @@ function x = freq_secf(F, x0, x1, precision)
 end
 
 %metoda quasi-Newtona
-function x = freq_qn(F, x, delta, precision)
+function x = freq_qn(F, x0,x1, delta, precision)
+    dif = differ(F,x0,delta);
+    if(F(x0)*differ(F, dif,delta)>0)
+        x = x0;
+    else
+        x = x1;
+    end
     iterator = 0;
     while abs(F(x)) > precision
         x = x - F(x) / differ(F, x, delta);
