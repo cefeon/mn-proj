@@ -10,12 +10,18 @@ function plot_g(R1, R2, C1, C2, fmin, fmax)
     for i = 1 : length(x)
         y(i) = F(z(i));
     end
-
-    thr = zeros(1, length(x));
-    for i = 1 : length(x)
-        thr(i) = max(y) - 3;
-    end
-
-    semilogx(x, y, x, thr);
+    fc1=13811.801114;
+    fc2=305659.838834;
+    thr = max(y) - 3;
+    
+    semilogx(x, y);
+    ylabel('Amplituda[dB]');
+    xlabel('f[Hz]');
+    hold on
+    yline(thr,'-.','-3db');
+    xline(fc1,'--','fc1');
+    xline(fc2,'--','fc2');
+    semilogx(fc1,thr,'or');
+    semilogx(fc2,thr,'or');
     grid on
 end
