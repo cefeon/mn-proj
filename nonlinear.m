@@ -5,7 +5,7 @@ function nonlinear()
     C2 = 0.2e-6;
     h = 1e-7;
     t = [ 0 : h : 0.05]; 
-    freq = 65000;
+    freq = 1000;
     
     e = @(t) sin(2*pi*t*freq);
 
@@ -14,8 +14,9 @@ function nonlinear()
 
     c_aprox3 = aprox(un, in, 3);
     c_aprox5 = aprox(un, in, 5); 
+    vander = vandermonde(un);
     diff2 = difmatrix(un, in, 0.25);
-    i_inter = @(u) ctv(interpolate(un, in), u);
+    i_inter = @(u) ctv(interpolate(un, in, vander), u);
     i_aprox3 = @(u) ctv(c_aprox3, u);
     i_aprox5 = @(u) ctv(c_aprox5, u);
     i_spline = @(u) splineit(un, in, diff2, u);
@@ -24,7 +25,7 @@ function nonlinear()
             [  1/C1 * ( (e(t) - y(1) - y(2))/R2 + (e(t) - y(1))/R1 )
                1/C2 * ( (e(t) - y(1) - y(2))/R2 - In )];
 
-    u = euler(t, h, dy, i_spline);
+    u = euler(t, h, dy, i_aprox5);
     %for v=1 : length(t)
     %    dP(v) = ((e(t(v))-u(1,v)-u(2,v))*i_inter(u(2,v)));
     %end
@@ -35,8 +36,7 @@ function nonlinear()
     
 
     %interpolacja
-    function A = interpolate(X, Y)
-        M = vandermonde(X);
+    function A = interpolate(X, Y, M)
         A = M \ Y';
     end
 
