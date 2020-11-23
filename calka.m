@@ -25,13 +25,13 @@ function calka(freq)
 
     u = euler(t, h, dy);
     
-    %obliczanie wartości P ze wzoru
+    %obliczanie wartości dP ze wzoru
     for i=1 : length(t)
         dP(i) = (e(t(i))-u(1,i))^2/R1 + (e(t(i))-u(1,i)-u(2,i))^2/R2;
     end
     
     parabole = int_simps (t,h,dP);
-    prostokaty = int_rect (t,dP,h);
+    prostokaty = int_rect (t,h,dP);
     
     fprintf('Metoda prostokatów: %e \n\n',prostokaty);
     fprintf('Metoda Simpsona: %e \n\n',parabole);
@@ -46,7 +46,7 @@ function calka = int_simps (t,h,df)
 end
 
 %złożona metoda prostokątów lewych
-function calka = int_rect (t,df, h)
+function calka = int_rect (t,h,df)
     for i =  1 : length(t)-1
         dfdx(i) = df(i) * h;
     end
