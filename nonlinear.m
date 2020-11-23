@@ -3,29 +3,36 @@ function nonlinear()
     R2 = 10;
     C1 = 0.1e-6;
     C2 = 0.2e-6;
-    RL = 1e8;
     h = 1e-7;
     t = [ 0 : h : 0.05]; 
     freq = 65000;
+    
     e = @(t) sin(2*pi*t*freq);
 
     un = [-1 -0.75 -0.5 -0.25 0 0.25 0.5 0.75 1];
     in = [0.01 -0.01 0.02 0.01 0 0.23 0.42 0.6 0.95];
 
+    c_aprox3 = aprox(un, in, 3);
+    c_aprox5 = aprox(un, in, 5); 
+    diff2 = difmatrix(un, in, 0.25);
     i_inter = @(u) ctv(interpolate(un, in), u);
-
-    i_aprox3 = @(u) ctv(aprox(un, in, 3), u);
-
-    i_aprox5 = @(u) ctv(aprox(un, in, 5), u);
-
-    i_spline = @(u) splineit(un, in, u);
+    i_aprox3 = @(u) ctv(c_aprox3, u);
+    i_aprox5 = @(u) ctv(c_aprox5, u);
+    i_spline = @(u) splineit(un, in, diff2, u);
 
     dy = @(t,y,In) ...
             [  1/C1 * ( (e(t) - y(1) - y(2))/R2 + (e(t) - y(1))/R1 )
                1/C2 * ( (e(t) - y(1) - y(2))/R2 - In )];
 
-    u = euler(t, h, dy, i_inter);
+    u = euler(t, h, dy, i_spline);
+    %for v=1 : length(t)
+    %    dP(v) = ((e(t(v))-u(1,v)-u(2,v))*i_inter(u(2,v)));
+    %end
+
+    %p_nonlinear = int_simps(t,h,dP);
+    %fprintf('Moc wydzielana na rezystorze to %f', p_nonlinear);
     plot(t, u(2,:));
+    
 
     %interpolacja
     function A = interpolate(X, Y)
@@ -102,10 +109,9 @@ function nonlinear()
     end
 
     %oblicza wartość spline'a w punkcie x
-    function y = splineit(X,Y,x)
+    function y = splineit(X,Y,diff2,x)
         p = sector(x,X);
         h = X(p)-X(p+1);
-        diff2 = difmatrix(X,Y,h);
         y = ((x - X(p+1))^3/h - (x - X(p+1))*h)*diff2(p)/6 ...
             - ((x - X(p))^3/h - (x - X(p))*h)*diff2(p+1)/6 ...
             + Y(p)*(x - X(p+1))/h - Y(p+1)*(x - X(p))/h;
@@ -117,6 +123,14 @@ function nonlinear()
         for i = 1 : length(t)-1
            y(:, i+1) = y(:, i) + h * f(t(i), y(:, i), In(y(2,i)));
         end
+    end
+
+    %złożona metoda parabol (Simpsona)
+    function calka = int_simps (t,h,df)
+        for i = 1 : 2 : length(t)-2
+            simpson((i + 1) / 2) = h/3*(df(i)+4*df(i+1)+df(i+2));
+        end
+        calka = sum(simpson);
     end
 end
 
