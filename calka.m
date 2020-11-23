@@ -1,12 +1,11 @@
-function calka()
+function calka(freq)
     R1 = 30;
     R2 = 10;
     C1 = 0.1e-6;
     C2 = 0.2e-6;
     RL = 1e8;
-    h = 1e-8;
-    t = [ 0 : h : 1e-3]; 
-    freq = 'cycle';
+    h = 1e-6; %tutaj zmienia się dt
+    t = [ 0 : h : 1]; 
     
     if freq>0
         e = @(t) sin(2*pi*t*freq);
@@ -31,7 +30,7 @@ function calka()
         dP(i) = (e(t(i))-u(1,i))^2/R1 + (e(t(i))-u(1,i)-u(2,i))^2/R2;
     end
     
-    parabole = simps (t,h,dP);
+    parabole = int_simps (t,h,dP);
     prostokaty = int_rect (t,dP,h);
     
     fprintf('Metoda prostokatów: %e \n\n',prostokaty);
@@ -39,7 +38,7 @@ function calka()
 end
 
 %złożona metoda parabol (Simpsona)
-function calka = simps (t,h,df)
+function calka = int_simps (t,h,df)
     for i = 1 : 2 : length(t)-2
         simpson((i + 1) / 2) = h/3*(df(i)+4*df(i+1)+df(i+2));
     end
