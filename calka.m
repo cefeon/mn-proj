@@ -4,7 +4,7 @@ function calka(freq)
     C1 = 0.1e-6;
     C2 = 0.2e-6;
     RL = 1e8;
-    h = 1e-6; %tutaj zmienia się dt
+    h = 1e-8; %tutaj zmienia się dt
     t = [ 0 : h : 1]; 
     
     if freq>0
@@ -26,10 +26,10 @@ function calka(freq)
     u = euler(t, h, dy);
     
     %obliczanie wartości dP ze wzoru
+    dP = zeros(1,length(t));
     for i=1 : length(t)
         dP(i) = (e(t(i))-u(1,i))^2/R1 + (e(t(i))-u(1,i)-u(2,i))^2/R2;
     end
-    
     parabole = int_simps (t,h,dP);
     prostokaty = int_rect (t,h,dP);
     
@@ -39,6 +39,7 @@ end
 
 %złożona metoda parabol (Simpsona)
 function calka = int_simps (t,h,df)
+    simpson = zeros(1,(length(t)+1)/2);
     for i = 1 : 2 : length(t)-2
         simpson((i + 1) / 2) = h/3*(df(i)+4*df(i+1)+df(i+2));
     end
@@ -47,6 +48,7 @@ end
 
 %złożona metoda prostokątów lewych
 function calka = int_rect (t,h,df)
+    dfdx = zeros(1,length(t)-1);
     for i =  1 : length(t)-1
         dfdx(i) = df(i) * h;
     end
