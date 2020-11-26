@@ -4,18 +4,22 @@ function fc = find_fc(R1, R2, C1, C2)
        + (2i * pi * x) * (1 / (C1 * R1) + 1 / (C1 * R2) + 1 / (C2 * R2))...
        + 1 / (C1 * C2 * R1 * R2)));
     precision = 1e-7;
+    a_dolna = 0;
+    b_dolna = 35000;
+    a_gorna = 300000;
+    b_gorna = 500000;
     fprintf("Metoda bisekcji | dolna ");
-    freq_bisf(F, 0, 35000, precision);
+    freq_bisf(F, a_dolna, b_dolna, precision);
     fprintf("Metoda bisekcji | górna ");
-    freq_bisf(F, 300000, 500000, precision);
+    freq_bisf(F, a_gorna, b_gorna, precision);
     fprintf("Metoda siecznych | dolna ");
-    freq_secf(F, 0, 35000, precision);
+    freq_secf(F, a_dolna, b_dolna, precision);
     fprintf("Metoda siecznych | górna ");
-    freq_secf(F, 300000, 500000, precision);
+    freq_secf(F, b_gorna, b_gorna, precision);
     fprintf("Metoda quasi-Newtona | dolna ");
-    freq_qn(F, 0, 35000, 1e-7, precision);
+    freq_qn(F, a_dolna, b_dolna, 1e-7, precision);
     fprintf("Metoda quasi-Newtona | górna ");
-    freq_qn(F, 300000, 500000, 1e-7, precision);
+    freq_qn(F, a_gorna, b_gorna, 1e-7, precision);
 
 end
 
